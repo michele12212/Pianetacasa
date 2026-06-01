@@ -315,6 +315,62 @@
   }
 
   // ============================================
+  // TESTIMONIALS SLIDER
+  // ============================================
+  const tSlider = document.getElementById('t-slider');
+  if (tSlider) {
+    const slides = tSlider.querySelectorAll('.testimonial');
+    const prev = tSlider.querySelector('.t-prev');
+    const next = tSlider.querySelector('.t-next');
+    const dotsContainer = tSlider.querySelector('.t-dots');
+
+    slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 't-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', `Recensione ${i + 1}`);
+      dot.setAttribute('role', 'tab');
+      dot.dataset.i = i;
+      dotsContainer.appendChild(dot);
+    });
+
+    const dots = dotsContainer.querySelectorAll('.t-dot');
+    let current = 0;
+    let timer = null;
+
+    const goTo = (i) => {
+      current = (i + slides.length) % slides.length;
+      slides.forEach((s, idx) => s.classList.toggle('active', idx === current));
+      dots.forEach((d, idx) => d.classList.toggle('active', idx === current));
+    };
+
+    const stopTimer = () => { if (timer) { clearInterval(timer); timer = null; } };
+    const startTimer = () => {
+      stopTimer();
+      if (prefersReducedMotion) return;
+      timer = setInterval(() => goTo(current + 1), 7000);
+    };
+
+    prev.addEventListener('click', () => { goTo(current - 1); startTimer(); });
+    next.addEventListener('click', () => { goTo(current + 1); startTimer(); });
+    dots.forEach((d) => d.addEventListener('click', () => {
+      goTo(parseInt(d.dataset.i, 10));
+      startTimer();
+    }));
+
+    tSlider.addEventListener('mouseenter', stopTimer);
+    tSlider.addEventListener('mouseleave', startTimer);
+
+    // Keyboard navigation
+    tSlider.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') { goTo(current - 1); startTimer(); }
+      if (e.key === 'ArrowRight') { goTo(current + 1); startTimer(); }
+    });
+    tSlider.setAttribute('tabindex', '0');
+
+    startTimer();
+  }
+
+  // ============================================
   // CONTACT FORM
   // ============================================
   const form = document.getElementById('contact-form');
