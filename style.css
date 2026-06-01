@@ -1030,6 +1030,17 @@ section {
   color: rgba(245, 240, 232, 0.5);
 }
 
+.t-google .g-score {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 2.6rem;
+  line-height: 1;
+  color: var(--gold);
+  margin-top: 0.8rem;
+  letter-spacing: -0.02em;
+}
+
 @media (max-width: 768px) {
   .t-slider {
     padding: 0;
